@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js';
+import TopNavigation from './TopNavigation/TopNavigation.jsx';
+import Recommendations from './Recommendations/Recommendations.jsx';
+
 const spotifyApi = new SpotifyWebApi();
 
 class App extends Component {
@@ -13,8 +15,7 @@ class App extends Component {
 			spotifyApi.setAccessToken(token);
 		}
 		this.state = {
-			loggedIn: token ? true : false,
-			nowPlaying: { name: 'Not Checked', albumArt: '' }
+			loggedIn: token ? true : false
 		}
 	}
 	getHashParams() {
@@ -28,38 +29,19 @@ class App extends Component {
 		}
 		return hashParams;
 	}
-	getNowPlaying() {
-		spotifyApi.getMyCurrentPlaybackState()
-			.then((response) => {
-				this.setState({
-					nowPlaying: {
-						name: response.item.name,
-						albumArt: response.item.album.images[0].url
-					}
-				});
-			})
-	}
 	render() {
 		return (
-			<div className="App">
-				<header className="App-header">
-					<img src={logo} className="App-logo" alt="logo" />
-					<h1 className="App-title">Welcome to React</h1>
-				</header>
-				<p className="App-intro">
-					<a href='http://localhost:8888'> Login to Spotify </a>
-					<div>
-						Now Playing: {this.state.nowPlaying.name}
-					</div>
-					<div>
-						<img src={this.state.nowPlaying.albumArt} alt='album' style={{ height: 150 }} />
-					</div>
-					{this.state.loggedIn &&
-						<button onClick={() => this.getNowPlaying()}>
-							Check Now Playing
-            </button>
+			<div>
+				<TopNavigation />
+				<div className="App-intro">
+					{
+						!this.state.loggedIn &&
+						<a href='http://localhost:8888'> Login to Spotify </a>
 					}
-				</p>
+					{	this.state.loggedIn &&
+							<Recommendations />
+					}
+				</div>
 			</div>
 		);
 	}
