@@ -33,7 +33,7 @@ class App extends Component {
 		return (
 			<div>
 				<TopNavigation />
-				<div className="App-intro">
+				<div className="intro">
 					{
 						!this.state.loggedIn &&
 						<a href='http://localhost:8888'> Login to Spotify </a>

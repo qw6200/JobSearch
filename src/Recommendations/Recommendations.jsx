@@ -40,7 +40,7 @@ export default class Recommendations extends Component {
     }
     render() {
         return (
-            <div>
+            <div className="recommendations">
                 Now Playing: {this.state.nowPlaying.name}
                 {this.getNowPlaying()}
                 <div>

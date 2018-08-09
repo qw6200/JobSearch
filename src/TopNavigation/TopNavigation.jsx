@@ -16,7 +16,7 @@ export default class TopNavigation extends Component {
 
     render() {
         return (
-            <div>
+            <div className="topNav">
                 <Menu
                     onClick={this.handleClick}
                     selectedKeys={[this.state.current]}
