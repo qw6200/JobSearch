@@ -3,6 +3,9 @@
 .App {
   text-align: center;
 }
+.root {
+  background-color: #fafafa;
+}
 .intro {
   text-align: center;
 }

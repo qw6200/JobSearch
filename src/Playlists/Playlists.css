@@ -1,4 +1,6 @@
-.recommendations {
+.playlists {
+    background-color: white;
+    padding: 40px;
     margin: 20px 400px;
 }
 .table {

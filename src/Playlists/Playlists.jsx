@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Icon } from 'antd';
+import { Button, Table  } from 'antd';
 import './Playlists.css';
 import SpotifyWebApi from 'spotify-web-api-js';
 
@@ -9,11 +9,11 @@ export default class Playlists extends Component {
     constructor() {
         super();
         this.state = {
+            id: this.props.userID,
             nowPlaying: { name: 'Not Checked', albumArt: '' },
-            playlist: [{
+            playlists: [{
                 name: '',
                 numOfTracks: 0,
-                id: ''
             }]
         }
         this.getPlaylist = this.getPlaylist.bind(this);
@@ -21,7 +21,7 @@ export default class Playlists extends Component {
     componentDidMount() {
         this.getNowPlaying();
         this.getUserPlaylists();
-        this.state.playlist.splice(0, 1);
+        this.state.playlists.splice(0, 1);
     }
     getNowPlaying() {
         spotifyApi.getMyCurrentPlaybackState()
@@ -39,7 +39,7 @@ export default class Playlists extends Component {
             .then((data) => {
                 return data.items.forEach((item) => {
                     this.setState({
-                        playlist: this.state.playlist.concat({
+                        playlists: this.state.playlists.concat({
                             name: item.name,
                             numOfTracks: item.tracks.total,
                             id: item.id
@@ -50,7 +50,7 @@ export default class Playlists extends Component {
 
     }
     getPlaylist() {
-
+        console.log("UserID: " + this.state.userID);
     }
     render() {
         const columns = [{
@@ -75,21 +75,21 @@ export default class Playlists extends Component {
             )
         }];
         const data = [];
-        for (let i = 0; i < this.state.playlist.length; i++) {
+        for (let i = 0; i < this.state.playlists.length; i++) {
             data.push({
                 key: i,
-                name: this.state.playlist[i].name,
-                numOfTracks: this.state.playlist[i].numOfTracks,
-                ID: this.state.playlist[i].id,
+                name: this.state.playlists[i].name,
+                numOfTracks: this.state.playlists[i].numOfTracks,
+                ID: this.state.playlists[i].id,
             })
         }
         return (
-            <div className="recommendations">
+            <div className="playlists">
                 Now Playing: {this.state.nowPlaying.name}
                 <div>
-                    <img src={this.state.nowPlaying.albumArt} alt='album' style={{ height: 150 }} />
+                    <img src={this.state.nowPlaying.albumArt} alt='album' style={{ height: 150, marginTop: '20px'}} />
                 </div>
-                <Button type="primary" onClick={() => this.getNowPlaying()}>
+                <Button type="primary" onClick={() => this.getNowPlaying()} style={{marginTop: '10px'}}>
                     Check Now Playing
                 </Button>
                 <Table className='table' dataSource={data} columns={columns} />
