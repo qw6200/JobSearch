@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js';
-import TopNavigation from './TopNavigation/TopNavigation.jsx';
-import Recommendations from './Recommendations/Recommendations.jsx';
+import TopNavigation from './TopNavigation/TopNavigation';
+import Playlists from './Playlists/Playlists';
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -36,10 +36,10 @@ class App extends Component {
 				<div className="intro">
 					{
 						!this.state.loggedIn &&
-						<a href='http://localhost:8888'> Login to Spotify </a>
+						<a href='http://localhost:8888/login'> Login to Spotify </a>
 					}
 					{	this.state.loggedIn &&
-							<Recommendations />
+							<Playlists />
 					}
 				</div>
 			</div>

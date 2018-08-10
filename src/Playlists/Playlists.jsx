@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
-import { Button, Table } from 'antd';
-import './Recommendations.css';
+import { Button, Table, Icon } from 'antd';
+import './Playlists.css';
 import SpotifyWebApi from 'spotify-web-api-js';
 
 const spotifyApi = new SpotifyWebApi();
 
-export default class Recommendations extends Component {
+export default class Playlists extends Component {
     constructor() {
         super();
         this.state = {
             nowPlaying: { name: 'Not Checked', albumArt: '' },
-            playlistNames: [],
-            numOfTracks: [],
+            playlist: [{
+                name: '',
+                numOfTracks: 0,
+                id: ''
+            }]
         }
+        this.getPlaylist = this.getPlaylist.bind(this);
     }
     componentDidMount() {
         this.getNowPlaying();
         this.getUserPlaylists();
+        this.state.playlist.splice(0, 1);
     }
     getNowPlaying() {
         spotifyApi.getMyCurrentPlaybackState()
@@ -34,11 +39,17 @@ export default class Recommendations extends Component {
             .then((data) => {
                 return data.items.forEach((item) => {
                     this.setState({
-                        playlistNames: this.state.playlistNames.concat(item.name),
-                        numOfTracks: this.state.numOfTracks.concat(item.tracks.total)
+                        playlist: this.state.playlist.concat({
+                            name: item.name,
+                            numOfTracks: item.tracks.total,
+                            id: item.id
+                        })
                     });
                 });
             })
+
+    }
+    getPlaylist() {
 
     }
     render() {
@@ -50,13 +61,26 @@ export default class Recommendations extends Component {
             title: '# of Tracks',
             dataIndex: 'numOfTracks',
             key: 'numOfTracks',
+        }, {
+            title: 'ID',
+            dataIndex: 'ID',
+            key: 'ID',
+        }, {
+            title: 'Get Similar Songs',
+            key: 'recommend',
+            render: (text, record) => (
+                <div>
+                    <Button icon="play-circle-o" onClick={this.getPlaylist} />
+                </div>
+            )
         }];
         const data = [];
-        for (let i = 0; i < this.state.playlistNames.length; i++) {
+        for (let i = 0; i < this.state.playlist.length; i++) {
             data.push({
                 key: i,
-                name: this.state.playlistNames[i],
-                numOfTracks: this.state.numOfTracks[i]
+                name: this.state.playlist[i].name,
+                numOfTracks: this.state.playlist[i].numOfTracks,
+                ID: this.state.playlist[i].id,
             })
         }
         return (
