@@ -52,8 +52,8 @@ export default class Playlists extends Component {
                 });
             })
     }
-    getPlaylist(data) {
-        
+    getPlaylist(form, key) {
+        console.log("Form: " + form + " and key: " + key);
     }
     createPlaylist() {
         const columns = [{
@@ -71,9 +71,9 @@ export default class Playlists extends Component {
         }, {
             title: 'Get Similar Songs',
             key: 'recommend',
-            render: (data) => (
+            render: (text, record) => (
                 <div>
-                    <Button icon="play-circle-o" onClick={this.getPlaylist(data)} />
+                    <Button icon="play-circle-o" onClick={() => this.getPlaylist(text, record.key)} />
                 </div>
             )
         }];
@@ -87,15 +87,15 @@ export default class Playlists extends Component {
             })
         }
         const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
+            // onChange: (selectedRowKeys, selectedRows) => {
+            //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            // },
             onSelect: (record, selected, selectedRows) => {
                 console.log(record, selected, selectedRows);
             },
-            onSelectAll: (selected, selectedRows, changeRows) => {
-                console.log(selected, selectedRows, changeRows);
-            },
+            // onSelectAll: (selected, selectedRows, changeRows) => {
+            //     console.log(selected, selectedRows, changeRows);
+            // },
         };
         return (
             <Table rowSelection={rowSelection} className='table' dataSource={data} columns={columns} />
