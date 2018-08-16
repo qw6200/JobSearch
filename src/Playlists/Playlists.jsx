@@ -16,9 +16,11 @@ export default class Playlists extends Component {
                 name: '',
                 numOfTracks: 0,
             }],
-            isRecommendations: false
+            isRecommendations: false,
+            tracksList: [],
+            randomNum: 0
         }
-        this.getPlaylist = this.getPlaylist.bind(this);
+        this.getPlaylistTracks = this.getPlaylistTracks.bind(this);
         this.handleModal = this.handleModal.bind(this);
     }
     componentDidMount() {
@@ -60,10 +62,35 @@ export default class Playlists extends Component {
             isRecommendations: !prevState.isRecommendations
         }));
     }
-    getPlaylist(data, key) {
-        this.setState(prevState => ({
-            isRecommendations: !prevState.isRecommendations
-        }));
+    getRandomTracks() {
+        const min = 0;
+        const max = this.state.tracksList.length - 1;
+        const random = min + Math.random() * (max - min);
+        this.setState({
+            randomNum: this.state.randomNum + random
+        })
+        const randomTrack = this.state.tracksList[this.state.randomNum];
+        console.log("Length of tracksList: " + this.state.tracksList.length);
+        console.log("Random Number: " + this.state.randomNum);
+        console.log("Random Track ID: " + randomTrack);
+    }
+    getPlaylistTracks(data, key) {
+        spotifyApi.getPlaylistTracks(this.state.id, data.ID)
+            .then((data) => {
+                data.items.forEach((item) => {
+                    this.setState({
+                        tracksList: this.state.tracksList.concat(item.track.id)
+                    })
+                })
+            })
+            .then(() => {
+                this.getRandomTracks();
+            })
+            .then(() => {
+                this.setState(prevState => ({
+                    isRecommendations: !prevState.isRecommendations
+                }));
+            })
     }
     createPlaylist() {
         const columns = [{
@@ -83,7 +110,7 @@ export default class Playlists extends Component {
             key: 'recommend',
             render: (data, record) => (
                 <div>
-                    <Button icon="play-circle-o" onClick={() => this.getPlaylist(data, record.key)} />
+                    <Button icon="play-circle-o" onClick={() => this.getPlaylistTracks(data)} />
                 </div>
             )
         }];
@@ -97,12 +124,12 @@ export default class Playlists extends Component {
             })
         }
         const rowSelection = {
+            onSelect: (record, selected, selectedRows) => {
+
+            },
             // onChange: (selectedRowKeys, selectedRows) => {
             //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             // },
-            onSelect: (record, selected, selectedRows) => {
-                console.log(record, selected, selectedRows);
-            },
             // onSelectAll: (selected, selectedRows, changeRows) => {
             //     console.log(selected, selectedRows, changeRows);
             // },
@@ -122,7 +149,7 @@ export default class Playlists extends Component {
                     Check Now Playing
                 </Button>
                 {this.createPlaylist()}
-                {this.state.isRecommendations ? <Recommendations handler={this.handleModal}/> : null}
+                {this.state.isRecommendations ? <Recommendations handler={this.handleModal} tracksList={this.state.tracksList} /> : null}
             </div>
         );
     }

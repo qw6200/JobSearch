@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
-import { Button, Modal } from 'antd';
+import { Modal } from 'antd';
 import './Recommendations.css';
 import SpotifyWebApi from 'spotify-web-api-js';
 
 const spotifyApi = new SpotifyWebApi();
 
-
 export default class Recommendations extends Component {
-    state = { visible: true }
+    constructor() {
+        super();
+        this.state = {
+            visible: true
+        }
+    }
 
     showModal = () => {
         this.setState({
             visible: true,
         });
+    }
+    componentDidMount() {
+        console.log("TracksList: " + this.props.tracksList);
+
     }
 
     handleOk = (e) => {
