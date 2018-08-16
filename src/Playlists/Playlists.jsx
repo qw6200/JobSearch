@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table  } from 'antd';
+import { Button, Table } from 'antd';
 import './Playlists.css';
 import SpotifyWebApi from 'spotify-web-api-js';
 
@@ -9,7 +9,7 @@ export default class Playlists extends Component {
     constructor() {
         super();
         this.state = {
-            id: this.props.userID,
+            id: 0,
             nowPlaying: { name: 'Not Checked', albumArt: '' },
             playlists: [{
                 name: '',
@@ -22,6 +22,10 @@ export default class Playlists extends Component {
         this.getNowPlaying();
         this.getUserPlaylists();
         this.state.playlists.splice(0, 1);
+        this.setState({
+            id: this.props.userID
+        })
+        this.createPlaylist();
     }
     getNowPlaying() {
         spotifyApi.getMyCurrentPlaybackState()
@@ -47,12 +51,11 @@ export default class Playlists extends Component {
                     });
                 });
             })
-
     }
-    getPlaylist() {
-        console.log("UserID: " + this.state.userID);
+    getPlaylist(data) {
+        
     }
-    render() {
+    createPlaylist() {
         const columns = [{
             title: 'Name',
             dataIndex: 'name',
@@ -68,9 +71,9 @@ export default class Playlists extends Component {
         }, {
             title: 'Get Similar Songs',
             key: 'recommend',
-            render: (text, record) => (
+            render: (data) => (
                 <div>
-                    <Button icon="play-circle-o" onClick={this.getPlaylist} />
+                    <Button icon="play-circle-o" onClick={this.getPlaylist(data)} />
                 </div>
             )
         }];
@@ -83,17 +86,34 @@ export default class Playlists extends Component {
                 ID: this.state.playlists[i].id,
             })
         }
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            },
+            onSelect: (record, selected, selectedRows) => {
+                console.log(record, selected, selectedRows);
+            },
+            onSelectAll: (selected, selectedRows, changeRows) => {
+                console.log(selected, selectedRows, changeRows);
+            },
+        };
+        return (
+            <Table rowSelection={rowSelection} className='table' dataSource={data} columns={columns} />
+        )
+    }
+    render() {
         return (
             <div className="playlists">
                 Now Playing: {this.state.nowPlaying.name}
                 <div>
-                    <img src={this.state.nowPlaying.albumArt} alt='album' style={{ height: 150, marginTop: '20px'}} />
+                    <img src={this.state.nowPlaying.albumArt} alt='album' style={{ height: 150, marginTop: '20px' }} />
                 </div>
-                <Button type="primary" onClick={() => this.getNowPlaying()} style={{marginTop: '10px'}}>
+                <Button type="primary" onClick={() => this.getNowPlaying()} style={{ marginTop: '10px' }}>
                     Check Now Playing
                 </Button>
-                <Table className='table' dataSource={data} columns={columns} />
+                {this.createPlaylist()}
             </div>
         );
     }
 }
+

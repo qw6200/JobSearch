@@ -1,8 +1,11 @@
 .playlists {
     background-color: white;
     padding: 40px;
-    margin: 20px 400px;
+    margin: 20px 200px;
 }
 .table {
     margin-top: 30px;
+}
+.ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+    text-align: center;
 }
