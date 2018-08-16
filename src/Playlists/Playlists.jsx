@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 import { Button, Table } from 'antd';
 import './Playlists.css';
+import Recommendations from '../Recommendations/Recommendations';
 import SpotifyWebApi from 'spotify-web-api-js';
 
 const spotifyApi = new SpotifyWebApi();
 
 export default class Playlists extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             id: 0,
             nowPlaying: { name: 'Not Checked', albumArt: '' },
             playlists: [{
                 name: '',
                 numOfTracks: 0,
-            }]
+            }],
+            isRecommendations: false
         }
         this.getPlaylist = this.getPlaylist.bind(this);
+        this.handleModal = this.handleModal.bind(this);
     }
     componentDidMount() {
         this.getNowPlaying();
@@ -52,8 +55,15 @@ export default class Playlists extends Component {
                 });
             })
     }
-    getPlaylist(form, key) {
-        console.log("Form: " + form + " and key: " + key);
+    handleModal() {
+        this.setState(prevState => ({
+            isRecommendations: !prevState.isRecommendations
+        }));
+    }
+    getPlaylist(data, key) {
+        this.setState(prevState => ({
+            isRecommendations: !prevState.isRecommendations
+        }));
     }
     createPlaylist() {
         const columns = [{
@@ -71,9 +81,9 @@ export default class Playlists extends Component {
         }, {
             title: 'Get Similar Songs',
             key: 'recommend',
-            render: (text, record) => (
+            render: (data, record) => (
                 <div>
-                    <Button icon="play-circle-o" onClick={() => this.getPlaylist(text, record.key)} />
+                    <Button icon="play-circle-o" onClick={() => this.getPlaylist(data, record.key)} />
                 </div>
             )
         }];
@@ -112,6 +122,7 @@ export default class Playlists extends Component {
                     Check Now Playing
                 </Button>
                 {this.createPlaylist()}
+                {this.state.isRecommendations ? <Recommendations handler={this.handleModal}/> : null}
             </div>
         );
     }
