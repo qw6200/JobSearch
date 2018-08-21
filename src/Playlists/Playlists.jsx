@@ -18,7 +18,7 @@ export default class Playlists extends Component {
             }],
             isRecommendations: false,
             tracksList: [],
-            randomNum: 0
+            randomTracks: [],
         }
         this.getPlaylistTracks = this.getPlaylistTracks.bind(this);
         this.handleModal = this.handleModal.bind(this);
@@ -61,18 +61,21 @@ export default class Playlists extends Component {
         this.setState(prevState => ({
             isRecommendations: !prevState.isRecommendations
         }));
-    }
-    getRandomTracks() {
-        const min = 0;
-        const max = this.state.tracksList.length - 1;
-        const random = min + Math.random() * (max - min);
         this.setState({
-            randomNum: this.state.randomNum + random
+            randomTracks: [],
+            tracksList: []
         })
-        const randomTrack = this.state.tracksList[this.state.randomNum];
-        console.log("Length of tracksList: " + this.state.tracksList.length);
-        console.log("Random Number: " + this.state.randomNum);
-        console.log("Random Track ID: " + randomTrack);
+    }
+    getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+    getRandomTracks(key) {
+        for (var i = 0; i < 5; i++) {
+            const randomID = this.state.tracksList[this.getRandomInt(this.state.tracksList.length-1)];
+            this.setState({
+                randomTracks: this.state.randomTracks.concat(randomID)
+            })
+        }
     }
     getPlaylistTracks(data, key) {
         spotifyApi.getPlaylistTracks(this.state.id, data.ID)
@@ -84,7 +87,7 @@ export default class Playlists extends Component {
                 })
             })
             .then(() => {
-                this.getRandomTracks();
+                this.getRandomTracks(key);
             })
             .then(() => {
                 this.setState(prevState => ({
@@ -110,7 +113,7 @@ export default class Playlists extends Component {
             key: 'recommend',
             render: (data, record) => (
                 <div>
-                    <Button icon="play-circle-o" onClick={() => this.getPlaylistTracks(data)} />
+                    <Button icon="play-circle-o" onClick={() => this.getPlaylistTracks(data, record.key)} />
                 </div>
             )
         }];
@@ -149,7 +152,7 @@ export default class Playlists extends Component {
                     Check Now Playing
                 </Button>
                 {this.createPlaylist()}
-                {this.state.isRecommendations ? <Recommendations handler={this.handleModal} tracksList={this.state.tracksList} /> : null}
+                {this.state.isRecommendations ? <Recommendations handler={this.handleModal} handleOutside={this.handleOutsideClose} randomTracks={this.state.randomTracks} /> : null}
             </div>
         );
     }
