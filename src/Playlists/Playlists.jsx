@@ -124,19 +124,8 @@ export default class Playlists extends Component {
                 ID: this.state.playlists[i].id,
             })
         }
-        const rowSelection = {
-            onSelect: (record, selected, selectedRows) => {
-
-            },
-            // onChange: (selectedRowKeys, selectedRows) => {
-            //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            // },
-            // onSelectAll: (selected, selectedRows, changeRows) => {
-            //     console.log(selected, selectedRows, changeRows);
-            // },
-        };
         return (
-            <Table rowSelection={rowSelection} className='table' dataSource={data} columns={columns} />
+            <Table className='table' dataSource={data} columns={columns} />
         )
     }
     render() {

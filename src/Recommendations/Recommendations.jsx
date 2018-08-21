@@ -20,7 +20,9 @@ export default class Recommendations extends Component {
             previewBool: false,
             selectedPreview: '',
             selectedPlaylistID: '',
-            tracksToAdd: []
+            tracksToAdd: [],
+            selectedRows: null,
+            selectedTracksList: []
         }
         this.playPreview = this.playPreview.bind(this);
     }
@@ -62,9 +64,9 @@ export default class Recommendations extends Component {
             alert("Preview is not available for this song.");
         }
         return <ReactPlayer url={url}
-                            playing
-                            height={0}
-                            width={0} />
+            playing
+            height={0}
+            width={0} />
     }
     triggerPreview(key) {
         this.setState({
@@ -72,8 +74,19 @@ export default class Recommendations extends Component {
             selectedPreview: this.state.playlists[key].preview
         })
     }
-    addToPlaylist() {
-        spotifyApi.addTracksToPlaylist()
+    addToPlaylist(idArray) {
+        console.log("ArrayID", idArray);
+        spotifyApi.addTracksToPlaylist(this.state.userID, this.state.selectedPlaylistID, idArray)
+            .then((data) => {
+                console.log("Data: " + JSON.stringify(data))
+            })
+    }
+    createIDArray() {
+        var idArray = [];
+        for (var i = 0; i < this.state.selectedRows.length; i++) {
+            idArray[i] = 'spotify:track:' + this.state.selectedRows[i].id
+        }
+        this.addToPlaylist(idArray);
     }
     createTable() {
         const columns = [{
@@ -103,18 +116,21 @@ export default class Recommendations extends Component {
             })
         }
         const rowSelection = {
-            onSelect: (record, selected, selectedRows) => {
-                console.log("Records that are clicked: " + JSON.stringify(record));
-            },
-            // onChange: (selectedRowKeys, selectedRows) => {
-            //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            // onSelect: (record, selected, selectedRows) => {
+            //     console.log("Records that are clicked: " + JSON.stringify(record));
             // },
+            onChange: (selectedRowKeys, selectedRows) => {
+                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
+                this.setState({
+                    selectedRows: selectedRows
+                })
+            },
             // onSelectAll: (selected, selectedRows, changeRows) => {
             //     console.log(selected, selectedRows, changeRows);
             // },
         };
         return (
-            <Table rowSelection={rowSelection} loading pagination={{ pageSize: 6 }} className='table' dataSource={data} columns={columns} />
+            <Table rowSelection={rowSelection} pagination={{ pageSize: 6 }} className='table' dataSource={data} columns={columns} />
         )
     }
     deleteList() {
@@ -129,6 +145,7 @@ export default class Recommendations extends Component {
             visible: false,
         });
         this.props.handler();
+        this.createIDArray();
     }
 
     handleCancel = (e) => {
