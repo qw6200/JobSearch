@@ -9,15 +9,18 @@ export default class Recommendations extends Component {
     constructor() {
         super();
         this.state = {
+            userID: '',
             visible: true,
             randomTracks: [],
             playlists: [{
                 name: '',
                 artist: '',
-                popularity: 0,
+                id: ''
             }],
             previewBool: false,
-            selectedPreview: ''
+            selectedPreview: '',
+            selectedPlaylistID: '',
+            tracksToAdd: []
         }
         this.playPreview = this.playPreview.bind(this);
     }
@@ -29,7 +32,9 @@ export default class Recommendations extends Component {
     componentDidMount() {
         this.state.playlists.splice(0, 1);
         this.setState({
-            randomTracks: this.props.randomTracks
+            randomTracks: this.props.randomTracks,
+            userID: this.props.userID,
+            selectedPlaylistID: this.props.selectedPlaylistID
         }, () => {
             this.getRecommendations();
         });
@@ -42,7 +47,8 @@ export default class Recommendations extends Component {
                         playlists: this.state.playlists.concat({
                             name: track.name,
                             artist: track.artists[0].name,
-                            preview: track.preview_url
+                            preview: track.preview_url,
+                            id: track.id
                         })
                     });
                 });
@@ -52,7 +58,9 @@ export default class Recommendations extends Component {
             })
     }
     playPreview(url) {
-        console.log("URL: " + url)
+        if (url === null) {
+            alert("Preview is not available for this song.");
+        }
         return <ReactPlayer url={url}
                             playing
                             height={0}
@@ -63,6 +71,9 @@ export default class Recommendations extends Component {
             previewBool: true,
             selectedPreview: this.state.playlists[key].preview
         })
+    }
+    addToPlaylist() {
+        spotifyApi.addTracksToPlaylist()
     }
     createTable() {
         const columns = [{
@@ -88,15 +99,22 @@ export default class Recommendations extends Component {
                 key: i,
                 name: this.state.playlists[i].name,
                 artist: this.state.playlists[i].artist,
+                id: this.state.playlists[i].id
             })
         }
         const rowSelection = {
             onSelect: (record, selected, selectedRows) => {
-
+                console.log("Records that are clicked: " + JSON.stringify(record));
             },
+            // onChange: (selectedRowKeys, selectedRows) => {
+            //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            // },
+            // onSelectAll: (selected, selectedRows, changeRows) => {
+            //     console.log(selected, selectedRows, changeRows);
+            // },
         };
         return (
-            <Table rowSelection={rowSelection} pagination={{ pageSize: 6 }} className='table' dataSource={data} columns={columns} />
+            <Table rowSelection={rowSelection} loading pagination={{ pageSize: 6 }} className='table' dataSource={data} columns={columns} />
         )
     }
     deleteList() {

@@ -18,6 +18,7 @@ export default class Playlists extends Component {
             }],
             isRecommendations: false,
             tracksList: [],
+            selectedPlaylistID: '',
             randomTracks: [],
         }
         this.getPlaylistTracks = this.getPlaylistTracks.bind(this);
@@ -73,7 +74,8 @@ export default class Playlists extends Component {
         for (var i = 0; i < 5; i++) {
             const randomID = this.state.tracksList[this.getRandomInt(this.state.tracksList.length-1)];
             this.setState({
-                randomTracks: this.state.randomTracks.concat(randomID)
+                randomTracks: this.state.randomTracks.concat(randomID),
+                selectedPlaylistID: this.state.playlists[key].id
             })
         }
     }
@@ -148,7 +150,11 @@ export default class Playlists extends Component {
                     Check Now Playing
                 </Button>
                 {this.createPlaylist()}
-                {this.state.isRecommendations ? <Recommendations handler={this.handleModal} handleOutside={this.handleOutsideClose} randomTracks={this.state.randomTracks} /> : null}
+                {this.state.isRecommendations ? <Recommendations userID={this.state.id} 
+                                                                 handler={this.handleModal} 
+                                                                 handleOutside={this.handleOutsideClose} 
+                                                                 randomTracks={this.state.randomTracks}
+                                                                 selectedPlaylistID={this.state.selectedPlaylistID}/> : null}
             </div>
         );
     }
