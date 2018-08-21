@@ -105,10 +105,6 @@ export default class Playlists extends Component {
             dataIndex: 'numOfTracks',
             key: 'numOfTracks',
         }, {
-            title: 'ID',
-            dataIndex: 'ID',
-            key: 'ID',
-        }, {
             title: 'Get Similar Songs',
             key: 'recommend',
             render: (data, record) => (

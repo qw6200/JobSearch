@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Modal, Table } from 'antd';
+import { Modal, Table, Button } from 'antd';
 import './Recommendations.css';
+import ReactPlayer from 'react-player';
 import SpotifyWebApi from 'spotify-web-api-js';
 
 const spotifyApi = new SpotifyWebApi();
@@ -13,9 +14,12 @@ export default class Recommendations extends Component {
             randomTracks: [],
             playlists: [{
                 name: '',
-                artist: ''
+                artist: '',
+                popularity: 0,
+                preview: ''
             }],
         }
+        this.playPreview = this.playPreview.bind(this);
     }
     showModal = () => {
         this.setState({
@@ -37,7 +41,9 @@ export default class Recommendations extends Component {
                     this.setState({
                         playlists: this.state.playlists.concat({
                             name: track.name,
-                            artist: track.artists[0].name
+                            artist: track.artists[0].name,
+                            popularity: track.popularity,
+                            preview: track.preview_url
                         })
                     });
                 });
@@ -45,6 +51,14 @@ export default class Recommendations extends Component {
             .then(() => {
                 this.createTable();
             })
+    }
+    playPreview() {
+        console.log("RUN");
+        return (<ReactPlayer url='https://p.scdn.co/mp3-preview/c6ffe28a78636b2f2e1651c5c4a8693b5ff5114b?cid=bbad4233e278492f9a14586b7f89c9b1'
+            playing
+            width={0}
+            height={0} />
+        )
     }
     createTable() {
         const columns = [{
@@ -55,13 +69,26 @@ export default class Recommendations extends Component {
             title: 'Artist',
             dataIndex: 'artist',
             key: 'artist',
+        }, {
+            title: 'Popularity (1-100 scale)',
+            dataIndex: 'popularity',
+            key: 'popularity',
+        }, {
+            title: 'Play Preview',
+            key: 'preview',
+            render: (data, record) => (
+                <div>
+                    <Button icon="play-circle-o" onClick={this.playPreview} />
+                </div>
+            )
         }];
         const data = [];
         for (let i = 0; i < this.state.playlists.length; i++) {
             data.push({
                 key: i,
                 name: this.state.playlists[i].name,
-                artist: this.state.playlists[i].artist
+                artist: this.state.playlists[i].artist,
+                popularity: this.state.playlists[i].popularity
             })
         }
         const rowSelection = {
@@ -70,7 +97,7 @@ export default class Recommendations extends Component {
             },
         };
         return (
-            <Table rowSelection={rowSelection} className='table' dataSource={data} columns={columns} />
+            <Table rowSelection={rowSelection} pagination={{ pageSize: 6 }} className='table' dataSource={data} columns={columns} />
         )
     }
     deleteList() {
@@ -94,7 +121,6 @@ export default class Recommendations extends Component {
         });
         this.props.handler();
     }
-
     render() {
         return (
             <div>
@@ -104,8 +130,10 @@ export default class Recommendations extends Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     width={800}
+                    bodyStyle={{ height: 'auto' }}
                 >
                     {this.createTable()}
+                    {this.playPreview()}
                 </Modal>
             </div>
         );
