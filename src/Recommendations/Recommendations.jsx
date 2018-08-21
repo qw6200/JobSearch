@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, Table, Button } from 'antd';
 import './Recommendations.css';
-import ReactPlayer from 'react-player';
 import SpotifyWebApi from 'spotify-web-api-js';
-
+import ReactPlayer from 'react-player'
 const spotifyApi = new SpotifyWebApi();
 
 export default class Recommendations extends Component {
@@ -16,8 +15,9 @@ export default class Recommendations extends Component {
                 name: '',
                 artist: '',
                 popularity: 0,
-                preview: ''
             }],
+            previewBool: false,
+            selectedPreview: ''
         }
         this.playPreview = this.playPreview.bind(this);
     }
@@ -42,7 +42,6 @@ export default class Recommendations extends Component {
                         playlists: this.state.playlists.concat({
                             name: track.name,
                             artist: track.artists[0].name,
-                            popularity: track.popularity,
                             preview: track.preview_url
                         })
                     });
@@ -52,13 +51,18 @@ export default class Recommendations extends Component {
                 this.createTable();
             })
     }
-    playPreview() {
-        console.log("RUN");
-        return (<ReactPlayer url='https://p.scdn.co/mp3-preview/c6ffe28a78636b2f2e1651c5c4a8693b5ff5114b?cid=bbad4233e278492f9a14586b7f89c9b1'
-            playing
-            width={0}
-            height={0} />
-        )
+    playPreview(url) {
+        console.log("URL: " + url)
+        return <ReactPlayer url={url}
+                            playing
+                            height={0}
+                            width={0} />
+    }
+    triggerPreview(key) {
+        this.setState({
+            previewBool: true,
+            selectedPreview: this.state.playlists[key].preview
+        })
     }
     createTable() {
         const columns = [{
@@ -70,15 +74,11 @@ export default class Recommendations extends Component {
             dataIndex: 'artist',
             key: 'artist',
         }, {
-            title: 'Popularity (1-100 scale)',
-            dataIndex: 'popularity',
-            key: 'popularity',
-        }, {
             title: 'Play Preview',
             key: 'preview',
             render: (data, record) => (
                 <div>
-                    <Button icon="play-circle-o" onClick={this.playPreview} />
+                    <Button icon="play-circle-o" onClick={() => this.triggerPreview(record.key)} />
                 </div>
             )
         }];
@@ -88,7 +88,6 @@ export default class Recommendations extends Component {
                 key: i,
                 name: this.state.playlists[i].name,
                 artist: this.state.playlists[i].artist,
-                popularity: this.state.playlists[i].popularity
             })
         }
         const rowSelection = {
@@ -133,7 +132,7 @@ export default class Recommendations extends Component {
                     bodyStyle={{ height: 'auto' }}
                 >
                     {this.createTable()}
-                    {this.playPreview()}
+                    {this.state.previewBool ? this.playPreview(this.state.selectedPreview) : null}
                 </Modal>
             </div>
         );
