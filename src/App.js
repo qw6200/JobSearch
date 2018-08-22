@@ -55,7 +55,7 @@ class App extends Component {
 				<div className="intro">
 					{
 						!this.state.loggedIn &&
-						<a href='https://www.tuneboon.me/login'> Login to Spotify </a>
+						<a href='https://melody-server.herokuapp.com/login'> Login to Spotify </a>
 					}
 					{this.renderPlaylist()}
 				</div>
