@@ -17,4 +17,9 @@
 
 .topNav {
 	text-align: center;
+	background-color: #d6e5f9;
+}
+.ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
+	float: none;
+	background-color: #e5eef9;
 }

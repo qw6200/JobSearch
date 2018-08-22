@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table } from 'antd';
+import { Button, Table, Alert } from 'antd';
 import './Playlists.css';
 import Recommendations from '../Recommendations/Recommendations';
 import SpotifyWebApi from 'spotify-web-api-js';
@@ -11,7 +11,6 @@ export default class Playlists extends Component {
         super(props);
         this.state = {
             id: 0,
-            nowPlaying: { name: 'Not Checked', albumArt: '' },
             playlists: [{
                 name: '',
                 numOfTracks: 0,
@@ -20,29 +19,19 @@ export default class Playlists extends Component {
             tracksList: [],
             selectedPlaylistID: '',
             randomTracks: [],
+            showAlert: false
         }
         this.getPlaylistTracks = this.getPlaylistTracks.bind(this);
         this.handleModal = this.handleModal.bind(this);
+        this.showAlert = this.showAlert.bind(this);
     }
     componentDidMount() {
-        this.getNowPlaying();
         this.getUserPlaylists();
         this.state.playlists.splice(0, 1);
         this.setState({
             id: this.props.userID
         })
         this.createPlaylist();
-    }
-    getNowPlaying() {
-        spotifyApi.getMyCurrentPlaybackState()
-            .then((response) => {
-                this.setState({
-                    nowPlaying: {
-                        name: response.item.name,
-                        albumArt: response.item.album.images[0].url
-                    }
-                });
-            })
     }
     getUserPlaylists() {
         spotifyApi.getUserPlaylists()
@@ -128,19 +117,19 @@ export default class Playlists extends Component {
             <Table className='table' dataSource={data} columns={columns} />
         )
     }
+    showAlert() {
+        this.setState({
+            showAlert: !this.state.showAlert
+        })
+    }
     render() {
         return (
             <div className="playlists">
-                Now Playing: {this.state.nowPlaying.name}
-                <div>
-                    <img src={this.state.nowPlaying.albumArt} alt='album' style={{ height: 150, marginTop: '20px' }} />
-                </div>
-                <Button type="primary" onClick={() => this.getNowPlaying()} style={{ marginTop: '10px' }}>
-                    Check Now Playing
-                </Button>
+                {this.state.showAlert ? <Alert message="Successfuly added to your playlist!" closable type="success" /> : null}
                 {this.createPlaylist()}
                 {this.state.isRecommendations ? <Recommendations userID={this.state.id} 
                                                                  handler={this.handleModal} 
+                                                                 alertHandler={this.showAlert}
                                                                  handleOutside={this.handleOutsideClose} 
                                                                  randomTracks={this.state.randomTracks}
                                                                  selectedPlaylistID={this.state.selectedPlaylistID}/> : null}

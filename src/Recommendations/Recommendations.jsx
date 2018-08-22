@@ -65,6 +65,7 @@ export default class Recommendations extends Component {
         }
         return <ReactPlayer url={url}
             playing
+            volume={0.1}
             height={0}
             width={0} />
     }
@@ -75,18 +76,20 @@ export default class Recommendations extends Component {
         })
     }
     addToPlaylist(idArray) {
-        console.log("ArrayID", idArray);
         spotifyApi.addTracksToPlaylist(this.state.userID, this.state.selectedPlaylistID, idArray)
             .then((data) => {
-                console.log("Data: " + JSON.stringify(data))
+                this.props.alertHandler();
             })
     }
     createIDArray() {
         var idArray = [];
-        for (var i = 0; i < this.state.selectedRows.length; i++) {
-            idArray[i] = 'spotify:track:' + this.state.selectedRows[i].id
+        if (this.state.selectedRows !== null) {
+            for (var i = 0; i < this.state.selectedRows.length; i++) {
+                idArray[i] = 'spotify:track:' + this.state.selectedRows[i].id
+            }
+            this.addToPlaylist(idArray);
         }
-        this.addToPlaylist(idArray);
+
     }
     createTable() {
         const columns = [{
@@ -120,7 +123,6 @@ export default class Recommendations extends Component {
             //     console.log("Records that are clicked: " + JSON.stringify(record));
             // },
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
                 this.setState({
                     selectedRows: selectedRows
                 })
@@ -130,7 +132,7 @@ export default class Recommendations extends Component {
             // },
         };
         return (
-            <Table rowSelection={rowSelection} pagination={{ pageSize: 6 }} className='table' dataSource={data} columns={columns} />
+            <Table rowSelection={rowSelection} pagination={{ pageSize: 8 }} className='table' dataSource={data} columns={columns} />
         )
     }
     deleteList() {
