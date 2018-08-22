@@ -40,7 +40,7 @@ class App extends Component {
 			);
 		}
 	}
-	getUser() {
+	getUser() {	
 		spotifyApi.getMe()
 			.then((data) => {
 				this.setState({
