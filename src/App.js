@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js';
+import HttpsRedirect from 'react-https-redirect';
 import TopNavigation from './TopNavigation/TopNavigation';
 import Playlists from './Playlists/Playlists';
 
@@ -40,7 +41,7 @@ class App extends Component {
 			);
 		}
 	}
-	getUser() {	
+	getUser() {
 		spotifyApi.getMe()
 			.then((data) => {
 				this.setState({
@@ -51,14 +52,16 @@ class App extends Component {
 	render() {
 		return (
 			<div className="root">
-				<TopNavigation />
-				<div className="intro">
-					{
-						!this.state.loggedIn &&
-						<a href='https://melody-server.herokuapp.com/login'> Login to Spotify </a>
-					}
-					{this.renderPlaylist()}
-				</div>
+				<HttpsRedirect>
+					<TopNavigation />
+					<div className="intro">
+						{
+							!this.state.loggedIn &&
+							<a href='https://melody-server.herokuapp.com/login'> Login to Spotify </a>
+						}
+						{this.renderPlaylist()}
+					</div>
+				</HttpsRedirect>
 			</div>
 		);
 	}
