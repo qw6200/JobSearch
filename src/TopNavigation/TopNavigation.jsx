@@ -14,8 +14,9 @@ export default class TopNavigation extends Component {
                 <div className="nav-btn">
                 </div>
                 <div className="nav-links">
-                    <a href="//github.io/jo_geek" target="_blank">GitHub</a>
-                    <a href="http://stackoverflow.com/users/4084003/" target="_blank">Contact</a>
+                    <a href="https://github.com/qw6200/TuneBoon">GitHub</a>
+                    <a href="https://leejacob.me">Contact</a>
+                    <a href="https://leejacob.me">Portfolio</a>
                 </div>
             </div>
         );

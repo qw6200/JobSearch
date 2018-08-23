@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Table, Button, notification } from 'antd';
+import { Modal, Table, Button, message } from 'antd';
 import './Recommendations.css';
 import SpotifyWebApi from 'spotify-web-api-js';
 import ReactPlayer from 'react-player'
@@ -62,7 +62,7 @@ export default class Recommendations extends Component {
     }
     playPreview(url) {
         if (url === null) {
-            alert("Preview is not available for this song.");
+            message.warning('Preview is not available for this song');
         }
         return <ReactPlayer url={url}
             playing
@@ -90,6 +90,7 @@ export default class Recommendations extends Component {
     addToPlaylist(idArray) {
         spotifyApi.addTracksToPlaylist(this.state.userID, this.state.selectedPlaylistID, idArray)
             .then((data) => {
+                message.success("Successfully added to your playlist!")
                 this.props.alertHandler();
             })
     }
@@ -144,7 +145,7 @@ export default class Recommendations extends Component {
             // },
         };
         return (
-            <Table rowSelection={rowSelection} pagination={{ pageSize: 8 }} className='table' dataSource={data} columns={columns} />
+            <Table rowSelection={rowSelection} pagination={{ pageSize: 7 }} locale={{ emptyText: 'Loading Tracks...'}}className='table' dataSource={data} columns={columns} />
         )
     }
     deleteList() {

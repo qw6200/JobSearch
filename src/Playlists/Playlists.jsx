@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Alert, notification, message } from 'antd';
+import { Button, Table, message, Icon } from 'antd';
 import './Playlists.css';
 import Recommendations from '../Recommendations/Recommendations';
 import SpotifyWebApi from 'spotify-web-api-js';
@@ -32,6 +32,9 @@ export default class Playlists extends Component {
             id: this.props.userID
         })
         this.createPlaylist();
+        return (
+            this.state.showAlert ? message.success("Successfully added to your playlist!") : null
+        )
     }
     getUserPlaylists() {
         spotifyApi.getUserPlaylists()
@@ -69,11 +72,6 @@ export default class Playlists extends Component {
         }
     }
     getPlaylistTracks(data, key) {
-        const args = {
-            description: 'Simply check the tracks you want and then press Add!',
-            duration: 5,
-        };
-        notification.open(args);
         spotifyApi.getPlaylistTracks(this.state.id, data.ID)
             .then((data) => {
                 data.items.forEach((item) => {
@@ -130,7 +128,7 @@ export default class Playlists extends Component {
     render() {
         return (
             <div className="playlists">
-                {this.state.showAlert ? message.success("Successfully added to your playlist!") : null}
+                <h2 style={{ color: '#75818c' }}> Your Playlists <Icon type="customer-service" style={{ marginLeft: '5px' }} /></h2>
                 {this.createPlaylist()}
                 {this.state.isRecommendations ? <Recommendations userID={this.state.id}
                     handler={this.handleModal}
