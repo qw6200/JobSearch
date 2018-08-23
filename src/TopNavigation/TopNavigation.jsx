@@ -5,15 +5,21 @@ import './TopNavigation.css';
 export default class TopNavigation extends Component {
     render() {
         return (
-            <div className="nav">
-                <div className="nav-header">
-                    <div className="nav-title">
+            <div class="nav">
+                <div class="nav-header">
+                    <div class="nav-title">
                         TuneBoon
-                    </div>
                 </div>
-                <div className="nav-btn">
                 </div>
-                <div className="nav-links">
+                <div class="nav-btn">
+                    <label for="nav-check">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </label>
+                </div>
+                <input type="checkbox" id="nav-check" />
+                <div class="nav-links">
                     <a href="https://github.com/qw6200/TuneBoon">GitHub</a>
                     <a href="https://leejacob.me">Contact</a>
                     <a href="https://leejacob.me">Portfolio</a>

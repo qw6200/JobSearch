@@ -59,16 +59,18 @@ class App extends Component {
 						{
 							!this.state.loggedIn &&
 							<div>
-								<div className="card">
-									<Card title="Welcome to TuneBoon!" bordered={true} style={{ width: 600, height: 300 }}>
-										<p>TuneBoon is a web application that allows Spotify users to explore and add songs that are closely
-											related to their playlists' songs.
-										</p>
-										<p>To start discovering new songs, you must first login to Spotify.</p>
-										<Button type="primary" className="loginButton">
-											<a href='https://melody-server.herokuapp.com/login'>Login to Spotify</a>
-										</Button>
-									</Card>
+								<div>
+									<div className="card">
+										<Card title="Welcome to TuneBoon!" bordered={true} style={{ width: '100%', height: 'auto', maxWidth: '600px' }}>
+											<p>TuneBoon is a web application that allows Spotify users to explore and add songs that are closely
+												related to their playlists' songs.
+												</p>
+											<p>To start discovering new songs, you must first login to Spotify.</p>
+											<Button type="primary" className="loginButton">
+												<a href='https://melody-server.herokuapp.com/login'>Login to Spotify</a>
+											</Button>
+										</Card>
+									</div>
 								</div>
 							</div>
 						}

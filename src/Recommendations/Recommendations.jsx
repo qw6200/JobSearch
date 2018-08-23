@@ -145,7 +145,7 @@ export default class Recommendations extends Component {
             // },
         };
         return (
-            <Table rowSelection={rowSelection} pagination={{ pageSize: 7 }} locale={{ emptyText: 'Loading Tracks...'}}className='table' dataSource={data} columns={columns} />
+            <Table rowSelection={rowSelection} pagination={{ pageSize: 7 }} locale={{ emptyText: 'Loading Tracks...'}} className='recom-table' dataSource={data} columns={columns} />
         )
     }
     deleteList() {

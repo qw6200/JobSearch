@@ -16,13 +16,13 @@ body {
 
 .nav>.nav-header {
 	display: inline;
-	margin-left: 375px;
 }
 
 .nav>.nav-header>.nav-title {
 	display: inline-block;
 	font-size: 22px;
-	color: white;
+	color: #fff;
+	margin-left: 20%;
 	padding: 10px 10px 10px 10px;
 }
 
@@ -32,8 +32,8 @@ body {
 
 .nav>.nav-links {
 	display: inline;
-	float: none;
-	margin-left: 400px;
+	float: right;
+	margin-right: 20%;
 	font-size: 18px;
 }
 
@@ -41,7 +41,7 @@ body {
 	display: inline-block;
 	padding: 13px 10px 13px 10px;
 	text-decoration: none;
-	color: white;
+	color: #efefef;
 }
 
 .nav>.nav-links>a:hover {
@@ -78,7 +78,7 @@ body {
 		position: absolute;
 		display: block;
 		width: 100%;
-		background-color: #d6e5f9;
+		background-color: #658db5;
 		height: 0px;
 		transition: all 0.3s ease-in;
 		overflow-y: hidden;

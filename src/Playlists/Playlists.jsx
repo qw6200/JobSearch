@@ -117,7 +117,7 @@ export default class Playlists extends Component {
             })
         }
         return (
-            <Table className='table' bordered dataSource={data} columns={columns} />
+            <Table className='playlist-table' bordered dataSource={data} columns={columns} />
         )
     }
     showAlert() {
@@ -128,7 +128,7 @@ export default class Playlists extends Component {
     render() {
         return (
             <div className="playlists">
-                <h2 style={{ color: '#75818c' }}> Your Playlists <Icon type="customer-service" style={{ marginLeft: '5px' }} /></h2>
+                <h2 style={{ color: '#75818c', marginLeft: '35%', marginRight: '35%', display: 'inline-block', textAlign: 'center', marginTop: '10px' }}> Your Playlists <Icon type="customer-service" style={{ marginLeft: '5px' }} /></h2>
                 {this.createPlaylist()}
                 {this.state.isRecommendations ? <Recommendations userID={this.state.id}
                     handler={this.handleModal}
