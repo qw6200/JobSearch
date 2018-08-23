@@ -1,25 +1,99 @@
-#components-layout-demo-top .logo {
-	width: 120px;
-	height: 31px;
-	margin: 16px 24px 16px 0;
-	float: left;
+* {
+	box-sizing: border-box;
 }
 
-.ant-menu {
-	display: inline-block;
+body {
+	margin: 0px;
+	font-family: 'segoe ui';
 }
 
-.logo {
-	display: inline-block;
+.nav {
+	height: 50px;
+	width: 100%;
+	background-color: #658db5;
 	position: relative;
-	top: -20px;
 }
 
-.topNav {
-	text-align: center;
-	background-color: #d6e5f9;
+.nav>.nav-header {
+	display: inline;
+	margin-left: 500px;
 }
-.ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
+
+.nav>.nav-header>.nav-title {
+	display: inline-block;
+	font-size: 22px;
+	color: white;
+	padding: 10px 10px 10px 10px;
+}
+
+.nav>.nav-btn {
+	display: none;
+}
+
+.nav>.nav-links {
+	display: inline;
 	float: none;
-	background-color: #e5eef9;
+	margin-left: 300px;
+	font-size: 18px;
+}
+
+.nav>.nav-links>a {
+	display: inline-block;
+	padding: 13px 10px 13px 10px;
+	text-decoration: none;
+	color: white;
+}
+
+.nav>.nav-links>a:hover {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.nav>#nav-check {
+	display: none;
+}
+
+@media (max-width:600px) {
+	.nav>.nav-btn {
+		display: inline-block;
+		position: absolute;
+		right: 0px;
+		top: 0px;
+	}
+	.nav>.nav-btn>label {
+		display: inline-block;
+		width: 50px;
+		height: 50px;
+		padding: 13px;
+	}
+	.nav>.nav-btn>label:hover {
+		background-color: rgba(0, 0, 0, 0.3);
+	}
+	.nav>.nav-btn>label>span {
+		display: block;
+		width: 25px;
+		height: 10px;
+		border-top: 2px solid #eee;
+	}
+	.nav>.nav-links {
+		position: absolute;
+		display: block;
+		width: 100%;
+		background-color: #d6e5f9;
+		height: 0px;
+		transition: all 0.3s ease-in;
+		overflow-y: hidden;
+		top: 50px;
+		left: 0px;
+	}
+	.nav>.nav-links>a {
+		display: block;
+		width: 100%;
+	}
+	.nav>#nav-check:not(:checked)+.nav-links {
+		height: 0px;
+	}
+	.nav>#nav-check:checked+.nav-links {
+		height: calc(100vh - 50px);
+		overflow-y: auto;
+	}
 }

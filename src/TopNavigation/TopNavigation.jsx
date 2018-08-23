@@ -1,30 +1,22 @@
 import React, { Component } from 'react';
-import { Menu, Icon } from 'antd';
+import { } from 'antd';
 import './TopNavigation.css';
 
 export default class TopNavigation extends Component {
-    state = {
-        current: 'mail',
-    }
-
-    handleClick = (e) => {
-        this.setState({
-            current: e.key,
-        });
-    }
-
     render() {
         return (
-            <div className="topNav">
-                <Menu
-                    onClick={this.handleClick}
-                    selectedKeys={[this.state.current]}
-                    mode="horizontal"
-                >
-                    <Menu.Item key="melody">
-                        <Icon type="customer-service" />Melody
-                    </Menu.Item>
-                </Menu>
+            <div className="nav">
+                <div className="nav-header">
+                    <div className="nav-title">
+                        TuneBoon
+                    </div>
+                </div>
+                <div className="nav-btn">
+                </div>
+                <div className="nav-links">
+                    <a href="//github.io/jo_geek" target="_blank">GitHub</a>
+                    <a href="http://stackoverflow.com/users/4084003/" target="_blank">Contact</a>
+                </div>
             </div>
         );
     }
