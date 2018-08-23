@@ -16,7 +16,7 @@ body {
 
 .nav>.nav-header {
 	display: inline;
-	margin-left: 500px;
+	margin-left: 375px;
 }
 
 .nav>.nav-header>.nav-title {
@@ -33,7 +33,7 @@ body {
 .nav>.nav-links {
 	display: inline;
 	float: none;
-	margin-left: 300px;
+	margin-left: 500px;
 	font-size: 18px;
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Table, Button } from 'antd';
+import { Modal, Table, Button, notification } from 'antd';
 import './Recommendations.css';
 import SpotifyWebApi from 'spotify-web-api-js';
 import ReactPlayer from 'react-player'
@@ -22,7 +22,8 @@ export default class Recommendations extends Component {
             selectedPlaylistID: '',
             tracksToAdd: [],
             selectedRows: null,
-            selectedTracksList: []
+            selectedTracksList: [],
+            currentKey: -1
         }
         this.playPreview = this.playPreview.bind(this);
     }
@@ -70,10 +71,21 @@ export default class Recommendations extends Component {
             width={0} />
     }
     triggerPreview(key) {
-        this.setState({
-            previewBool: true,
-            selectedPreview: this.state.playlists[key].preview
-        })
+        if (this.state.currentKey !== key) {
+            this.setState({
+                currentKey: key
+            }, () => {
+                this.setState({
+                    previewBool: true,
+                    selectedPreview: this.state.playlists[key].preview
+                })
+            })
+        } else if (this.state.currentKey === key) {
+            this.setState({
+                previewBool: false,
+            })
+        }
+
     }
     addToPlaylist(idArray) {
         spotifyApi.addTracksToPlaylist(this.state.userID, this.state.selectedPlaylistID, idArray)
@@ -164,6 +176,7 @@ export default class Recommendations extends Component {
                     title="Recommended Tracks"
                     visible={this.state.visible}
                     onOk={this.handleOk}
+                    okText='Add'
                     onCancel={this.handleCancel}
                     width={800}
                     bodyStyle={{ height: 'auto' }}

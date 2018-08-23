@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Alert } from 'antd';
+import { Button, Table, Alert, notification, message } from 'antd';
 import './Playlists.css';
 import Recommendations from '../Recommendations/Recommendations';
 import SpotifyWebApi from 'spotify-web-api-js';
@@ -61,7 +61,7 @@ export default class Playlists extends Component {
     }
     getRandomTracks(key) {
         for (var i = 0; i < 5; i++) {
-            const randomID = this.state.tracksList[this.getRandomInt(this.state.tracksList.length-1)];
+            const randomID = this.state.tracksList[this.getRandomInt(this.state.tracksList.length - 1)];
             this.setState({
                 randomTracks: this.state.randomTracks.concat(randomID),
                 selectedPlaylistID: this.state.playlists[key].id
@@ -69,6 +69,11 @@ export default class Playlists extends Component {
         }
     }
     getPlaylistTracks(data, key) {
+        const args = {
+            description: 'Simply check the tracks you want and then press Add!',
+            duration: 5,
+        };
+        notification.open(args);
         spotifyApi.getPlaylistTracks(this.state.id, data.ID)
             .then((data) => {
                 data.items.forEach((item) => {
@@ -114,7 +119,7 @@ export default class Playlists extends Component {
             })
         }
         return (
-            <Table className='table' dataSource={data} columns={columns} />
+            <Table className='table' bordered dataSource={data} columns={columns} />
         )
     }
     showAlert() {
@@ -125,14 +130,14 @@ export default class Playlists extends Component {
     render() {
         return (
             <div className="playlists">
-                {this.state.showAlert ? <Alert message="Successfuly added to your playlist!" closable type="success" /> : null}
+                {this.state.showAlert ? message.success("Successfully added to your playlist!") : null}
                 {this.createPlaylist()}
-                {this.state.isRecommendations ? <Recommendations userID={this.state.id} 
-                                                                 handler={this.handleModal} 
-                                                                 alertHandler={this.showAlert}
-                                                                 handleOutside={this.handleOutsideClose} 
-                                                                 randomTracks={this.state.randomTracks}
-                                                                 selectedPlaylistID={this.state.selectedPlaylistID}/> : null}
+                {this.state.isRecommendations ? <Recommendations userID={this.state.id}
+                    handler={this.handleModal}
+                    alertHandler={this.showAlert}
+                    handleOutside={this.handleOutsideClose}
+                    randomTracks={this.state.randomTracks}
+                    selectedPlaylistID={this.state.selectedPlaylistID} /> : null}
             </div>
         );
     }

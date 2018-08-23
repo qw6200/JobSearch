@@ -1,12 +1,21 @@
 .playlists {
     background-color: white;
-    padding: 40px;
     margin: 20px 200px;
-    padding-top: 0;
 }
 .table {
     margin-top: 30px;
 }
 .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
     text-align: center;
+}
+.ant-table-pagination.ant-pagination {
+    padding-right: 15px;
+    margin-top: 40px;
+}
+.ant-notification-notice-description {
+    margin-top: -19px;
+    margin-right: 5px;
+}
+body {
+    background-color: white;
 }

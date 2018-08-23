@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Card, Button, Icon } from 'antd';
 import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js';
 import HttpsRedirect from 'react-https-redirect';
@@ -57,8 +58,19 @@ class App extends Component {
 					<div className="intro">
 						{
 							!this.state.loggedIn &&
-
-							<a className="login" href='https://melody-server.herokuapp.com/login'> Login to Spotify </a>
+							<div>
+								<div className="card">
+									<Card title="Welcome to TuneBoon!" bordered={true} style={{ width: 500, height: 300 }}>
+										<p>TuneBoon is a web application that allows Spotify users to explore and add songs that are closely
+											related to their playlists' songs.
+										</p>
+										<p>To start discovering new songs, you must first login to Spotify.</p>
+										<Button type="primary" className="loginButton">
+											<a href='https://melody-server.herokuapp.com/login'>Login to Spotify</a>
+										</Button>
+									</Card>
+								</div>
+							</div>
 						}
 						{this.renderPlaylist()}
 					</div>
